@@ -1,0 +1,19 @@
+{% set profile = clientprofile() %}
+<li class="divider"></li>
+{% if hasauth() %}
+    <li class="last has-dropdown not-click">
+        <a href class="last">
+            <img class="user-avatar" src="{{ profile.avatar }}" alt="User Avatar" />
+            {{ profile.username }}
+        </a>
+        <ul class="dropdown">
+            <li><a href>My Plugins</a></li>
+            <li><a href>Submit a plugin</a></li>
+            <li id="github-logout">{{ displaylogout(true)|replace({'button': ''})|raw }}</li>
+        </ul>
+    </li>
+{% else %}
+    <li class="last" id="github-login">
+        {{ displaylogin(true)|replace({'button': ''})|raw }}
+    </li>
+{% endif %}
