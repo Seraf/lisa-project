@@ -1297,7 +1297,7 @@ var init = {
             $('form').watchChanges();
 
             // Do a regular post, and expect to be redirected back to the "new record" page.
-            var newaction = "?returnto=new";
+            var newaction = "?returnto=saveandnew";
             $('#editcontent').attr('action', newaction).submit();
         });
 
@@ -1306,7 +1306,9 @@ var init = {
         $('#sidebarsavecontinuebutton, #savecontinuebutton').bind('click', function (e) {
             e.preventDefault();
 
-            var newrecord = data.newRecord;
+            var newrecord = data.newRecord,
+                savedon = data.savedon,
+                msgNotSaved = data.msgNotSaved;
 
             // Disable the buttons, to indicate stuff is being done.
             $('#sidebarsavecontinuebutton, #savecontinuebutton').addClass('disabled');
@@ -1329,7 +1331,7 @@ var init = {
                 var ajaxaction = "?returnto=ajax";
                 $.post(ajaxaction, $("#editcontent").serialize())
                     .done(function (data) {
-                        $('p.lastsaved').html(data.savedon);
+                        $('p.lastsaved').html(savedon);
                         $('p.lastsaved').find('strong').text(moment().format('MMM D, HH:mm'));
                         $('p.lastsaved').find('time').attr('datetime', moment().format());
                         $('p.lastsaved').find('time').attr('title', moment().format());
@@ -1360,14 +1362,13 @@ var init = {
 
                     })
                     .fail(function(){
-                        $('p.lastsaved').text(data.msgNotSaved);
+                        $('p.lastsaved').text(msgNotSaved);
                     })
                     .always(function(){
                         // Re-enable buttons
                         $('#sidebarsavecontinuebutton, #savecontinuebutton').removeClass('disabled');
                     });
             }
-
         });
 
         // To preview the page, we set the target of the form to a new URL, and open it in a new window.
